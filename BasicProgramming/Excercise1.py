@@ -46,6 +46,53 @@ def check_odd_or_even(num_to_be_checked):
 print(f"5 is {check_odd_or_even(5)} number")
 print(f"4 is {check_odd_or_even(4)} number")
 
+#6. Generate a random number between 1 and 100 and ask the user to guess it.
+print("6. Generate a random number between 1 and 100 and ask the user to guess it.")
+
+import random
+sys_random_num = random.randrange(1,100)
+user_rand_num = input("System has generated a random number. Can you guess it?")
+
+if(sys_random_num == user_rand_num):
+    print("Your guess {user_rand_num} is correct")
+else:
+    print(f"Your guess is incorrect as system generated random number was {sys_random_num}")
+
+#7. Write a function to check if a given string is a palindrome.
+print("7. Write a function to check if a given string is a palindrome.")
+
+import math
+def check_palindrome(word):
+        length_word = len(word)
+        start = 0
+        is_palindrome = True
+        list_alph = []
+        for w in word.lower():
+            list_alph.append(w)       
+        
+        while(start < math.floor(length_word/2)):             
+             if(list_alph[start] == list_alph[length_word-(start+1)]):                  
+                  start  = start + 1                  
+             else:
+                 is_palindrome = False
+                 break
+             
+             
+        return is_palindrome
+
+
+def diplay_palidrome_results(word):
+    if (check_palindrome(word)):
+        print(f"Word {word} is a palidrome.")
+    else: 
+        print(f"Word {word} is not a palidrome.")
+
+diplay_palidrome_results("Madam")
+diplay_palidrome_results("Palindrome")
+diplay_palidrome_results("Noon")
+
+
+
 
     
 
