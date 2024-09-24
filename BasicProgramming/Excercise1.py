@@ -110,11 +110,57 @@ print(f"Largest number in the list {list_numbers} is {max_num}\n")
 #10 Create a simple calculator that can perform addition, subtraction, multiplication, and
 #division.
 
+def calculator_simulator(a,b,operation):
+    match operation:
+        case "Addition":        
+            return a + b
+        case "1":
+            return a + b
+        case "Substraction":
+            return a - b
+        case "2":
+            return a - b
+        case "Multiplication":
+            return a * b
+        case "3": 
+            return a * b
+        case "Division":
+            if b != 0:
+                return a / b
+            else:
+                return "Bad Request"
+        case "4":
+            if b != 0:
+                return a / b
+            else:
+                return "Bad Request"
+        case _: 
+            return "Bad Redquest"
 
+first_number = int(input("Please provide first number = "))
+second_number = int(input("Please provide second number = "));
+operation = input("Please provide operation by either selecting serial number or operation from 1. Addition 2. Substraction 3. Multiplication 4. Division = ");
 
+print(f"Result of the above calculation is {calculator_simulator(first_number, second_number, operation)}\n")
+
+#11. Write a function to find the square root of a number using Newton's method.
+print("11. Write a function to find the square root of a number using Newton's method.")
     
+#12 Reverse a given list without using the reverse() method.
+print("12. Reverse a given list without using the reverse method.")
 
+def rev_givent_str(inputList):
+    length = len(inputList)
+    rev_list_str = []
+    row = 0
+    while(row < length):
+        rev_list_str.append(inputList[length-(row + 1)])
+        row = row + 1
+    return rev_list_str
 
+list_str = ["1","2","3","4","5"]
+
+print(f"The reverse of the list {list_str} is {rev_givent_str(list_str)}")
 
 
 
