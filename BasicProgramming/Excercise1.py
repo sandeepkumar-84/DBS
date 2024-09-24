@@ -226,4 +226,27 @@ print(f"The number of vowels in string {'experiment'} are {count_vowels('experim
 print(f"The number of vowels in string {'vowels'} are {count_vowels('vowels')}")
 print(f"The number of vowels in string {'rythm'} are {count_vowels('rythm')}")
 
+#16 Check if a given year is a leap year.
 
+def check_leap_year(input_year):
+    if input_year % 4 == 0:
+        return "leap year"
+    else:
+        return "non leap year"
+    
+print(f"Year 2024 is  a {check_leap_year(2024)}")
+print(f"Year 2025 is  a {check_leap_year(2025)}")
+
+#17. Remove duplicates from a list without using sets.
+print("17. Remove duplicates from a list without using sets.")
+
+def remove_duplicates(listOrig):
+    listUniq = []
+    for x in listOrig:
+        if listUniq.__contains__(x) == False:
+            listUniq.append(x)    
+    return listUniq
+
+listOrig = [1,2,3,3,4,5,5,7,7,7,7]
+print(f"original list {listOrig}")
+print(f"list after removal of duplicates {remove_duplicates(listOrig)}")
