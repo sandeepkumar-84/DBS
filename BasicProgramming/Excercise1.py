@@ -224,7 +224,7 @@ def count_vowels(given_str):
 
 print(f"The number of vowels in string {'experiment'} are {count_vowels('experiment')}")
 print(f"The number of vowels in string {'vowels'} are {count_vowels('vowels')}")
-print(f"The number of vowels in string {'rythm'} are {count_vowels('rythm')}")
+print(f"The number of vowels in string {'rythm'} are {count_vowels('rythm')}\n")
 
 #16 Check if a given year is a leap year.
 
@@ -235,7 +235,7 @@ def check_leap_year(input_year):
         return "non leap year"
     
 print(f"Year 2024 is  a {check_leap_year(2024)}")
-print(f"Year 2025 is  a {check_leap_year(2025)}")
+print(f"Year 2025 is  a {check_leap_year(2025)}\n")
 
 #17. Remove duplicates from a list without using sets.
 print("17. Remove duplicates from a list without using sets.")
@@ -249,4 +249,25 @@ def remove_duplicates(listOrig):
 
 listOrig = [1,2,3,3,4,5,5,7,7,7,7]
 print(f"original list {listOrig}")
-print(f"list after removal of duplicates {remove_duplicates(listOrig)}")
+print(f"list after removal of duplicates {remove_duplicates(listOrig)}\n")
+
+#18. Write a program to sort a list of numbers using bubble sort.
+print("18. Write a program to sort a list of numbers using bubble sort.")
+
+
+def bubble_sort(listOrig):
+    for x in range(0,len(listOrig)):
+        for y in range(x+1,len(listOrig)-1):
+            if listOrig[x] > listOrig[y]:
+               z = listOrig[x]
+               listOrig[x] = listOrig[y]
+               listOrig[y] = z
+    return listOrig
+listOrig = [4,3,6,5,1,0,8]
+print(f"original list {listOrig}")
+print(f"list after bubble sort  {bubble_sort(listOrig)}\n")
+
+
+#19. Create a dictionary of names and ages, and print the name of the oldest person.
+print("19. Create a dictionary of names and ages, and print the name of the oldest person.")
+
