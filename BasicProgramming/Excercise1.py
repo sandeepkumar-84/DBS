@@ -160,7 +160,33 @@ def rev_givent_str(inputList):
 
 list_str = ["1","2","3","4","5"]
 
-print(f"The reverse of the list {list_str} is {rev_givent_str(list_str)}")
+print(f"The reverse of the list {list_str} is {rev_givent_str(list_str)}\n")
+
+#13. Write a program to find all the prime numbers between 1 and 100.
+print("13. Write a program to find all the prime numbers between 1 and 100.")
+
+def find_prime_lt(num):
+    checkNum =  4
+    list_prime = []
+    list_prime.append(2)
+    list_prime.append(3)
+    while(checkNum <= num):
+        x = 2
+        is_prime = True
+        while(x < checkNum):
+            if(checkNum % x == 0):
+                is_prime = False
+                break
+            else: 
+                x = x + 1
+        if(is_prime):
+            list_prime.append(checkNum)
+        checkNum = checkNum + 1
+    return list_prime
+
+print(f"List of prime numbers less than 100 is {find_prime_lt(100)}")
+
+
 
 
 
