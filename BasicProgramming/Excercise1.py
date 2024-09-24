@@ -186,6 +186,30 @@ def find_prime_lt(num):
 
 print(f"List of prime numbers less than 100 is {find_prime_lt(100)}")
 
+#14. Calculate the Fibonacci sequence up to a given number.
+print(f"14. Calculate the Fibonacci sequence up to a given number.")
+
+def find_fibonacci(num):
+    if num == 1:
+        
+        return 1
+    elif num <= 0:
+        
+        return 0
+    else:
+        
+        return find_fibonacci(num - 1) + find_fibonacci(num - 2)
+
+
+def find_fibonacdi_lt(sum):
+    less_than = 1
+    while find_fibonacci(less_than) < sum:
+        print(find_fibonacci(less_than))
+        less_than = less_than + 1
+    return ""
+
+print(f"Print all the find_fibonacci numbers less than 30")
+find_fibonacdi_lt(30)
 
 
 
