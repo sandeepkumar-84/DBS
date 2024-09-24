@@ -44,7 +44,7 @@ def check_odd_or_even(num_to_be_checked):
         return "Odd"
 
 print(f"5 is {check_odd_or_even(5)} number")
-print(f"4 is {check_odd_or_even(4)} number")
+print(f"4 is {check_odd_or_even(4)} number\n")
 
 #6. Generate a random number between 1 and 100 and ask the user to guess it.
 print("6. Generate a random number between 1 and 100 and ask the user to guess it.")
@@ -54,9 +54,9 @@ sys_random_num = random.randrange(1,100)
 user_rand_num = input("System has generated a random number. Can you guess it?")
 
 if(sys_random_num == user_rand_num):
-    print("Your guess {user_rand_num} is correct")
+    print("Your guess {user_rand_num} is correct\n")
 else:
-    print(f"Your guess is incorrect as system generated random number was {sys_random_num}")
+    print(f"Your guess {user_rand_num} is incorrect as system generated random number was {sys_random_num}\n")
 
 #7. Write a function to check if a given string is a palindrome.
 print("7. Write a function to check if a given string is a palindrome.")
@@ -83,14 +83,32 @@ def check_palindrome(word):
 
 def diplay_palidrome_results(word):
     if (check_palindrome(word)):
-        print(f"Word {word} is a palidrome.")
+        print(f"Word {word} is a palidrome.\n")
     else: 
-        print(f"Word {word} is not a palidrome.")
+        print(f"Word {word} is not a palidrome.\n")
 
 diplay_palidrome_results("Madam")
 diplay_palidrome_results("Palindrome")
 diplay_palidrome_results("Noon")
 
+#8. Calculate the factorial of a given number.
+print("8. Calculate the factorial of a given number.")
+
+def find_factorial(num):
+    if(num ==0 or num == 1):
+        return 1
+    else:
+        return num * (num -1)
+print(f"The factorial of number 5 is {find_factorial(5)}\n")
+
+#9. Write a program to find the largest element in a list.
+print("9. Write a program to find the largest element in a list.")
+
+max_num  = max(list_numbers)
+print(f"Largest number in the list {list_numbers} is {max_num}\n")
+
+#10 Create a simple calculator that can perform addition, subtraction, multiplication, and
+#division.
 
 
 
