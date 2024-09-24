@@ -211,7 +211,19 @@ def find_fibonacdi_lt(sum):
 print(f"Print all the find_fibonacci numbers less than 30")
 find_fibonacdi_lt(30)
 
+#15. Write a function to count the number of vowels in a given string.
+print("15. Write a function to count the number of vowels in a given string.")
 
+def count_vowels(given_str):
+    count = 0
+    list_vowels = ['a','e','i','o','u']
+    for x in given_str:
+        if list_vowels.__contains__(x):
+            count = count + 1
+    return count
 
+print(f"The number of vowels in string {'experiment'} are {count_vowels('experiment')}")
+print(f"The number of vowels in string {'vowels'} are {count_vowels('vowels')}")
+print(f"The number of vowels in string {'rythm'} are {count_vowels('rythm')}")
 
 
