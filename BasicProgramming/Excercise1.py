@@ -270,4 +270,33 @@ print(f"list after bubble sort  {bubble_sort(listOrig)}\n")
 
 #19. Create a dictionary of names and ages, and print the name of the oldest person.
 print("19. Create a dictionary of names and ages, and print the name of the oldest person.")
+old_age = {"John":"58","Dow":"67","Paul":"60","Zen":"65"}
+print(f"The old age dictionary looks like {old_age}")
+oldest_person = [name for name, age in old_age.items() if age == max(old_age.values())]
+print(f"The oldest person in the above dictionary is {str(oldest_person)[2:-21]}")
+
+#20. Write a program to find the least common multiple (LCM) of two numbers.
+print("20. Write a program to find the least common multiple (LCM) of two numbers.")
+
+def find_lcm(num1, num2):
+    factorsNum1 = []
+    factorsNum2 = []
+    stop_loop = True
+    multipleNum = 1
+    lcm = 0
+    while(stop_loop):
+        factorsNum1.append(num1 * multipleNum)
+        factorsNum2.append(num2 * multipleNum)
+        for item in factorsNum1:
+            if(factorsNum2.__contains__(item)):
+                factorsNum1
+                lcm = item
+                stop_loop = False
+                break
+        multipleNum = multipleNum + 1
+        
+    return lcm
+
+print(f"LCM of numers 2,3 is {find_lcm(2,3)}")
+print(f"LCM of numers 10,15 is {find_lcm(10,15)}")
 
