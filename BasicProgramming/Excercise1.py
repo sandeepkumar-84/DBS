@@ -1,9 +1,13 @@
 #Exercise 1: Week2: Python Basics To be completed by date:Tuesday, 1 October 2024, 11:00 AM
 
+import time
+import random
+import math
+
 #1. Write a program that prints "Hello, World!" to the console
 
 print("1. Write a program that prints \"Hello, World!\" to the console")
-print("Hello, World!\n")
+print("   Hello, World!\n")
 
 
 #2 Calculate the area of a rectangle given its length and width.
@@ -11,7 +15,7 @@ print("2. Calculate the area of a rectangle given its length and width.")
       
 width = 10
 length = 25
-print(f"Area of a rectangle with width:{width} and length {length} is {width*length}\n")
+print(f"   Area of a rectangle with width:{width} and length {length} is {width*length}\n")
 
 #3 Convert temperature from Celsius to Fahrenheit and vice versa.
 
@@ -20,11 +24,11 @@ print("3. Convert temperature from Celsius to Fahrenheit and vice versa.")
 temp_in_celsius = 24
 temp_in_farenheight = (temp_in_celsius * 9/5) + 32
 
-print(f" {temp_in_celsius} in celcius is equal to  {temp_in_farenheight} in Farenheight")
+print(f"   {temp_in_celsius} in celcius is equal to  {temp_in_farenheight} in Farenheight")
 
 temp_in_celsius = (temp_in_farenheight-32) * 5/9
 
-print(f" {temp_in_farenheight} in Farenheight is equal to  {temp_in_celsius} in Celsius \n")
+print(f"   {temp_in_farenheight} in Farenheight is equal to  {temp_in_celsius} in Celsius \n")
 
 #4. Create a list of numbers and print the sum of all the elements.
 print("4. Create a list of numbers and print the sum of all the elements.")
@@ -33,7 +37,7 @@ list_numbers = [1,3,5,7,9,11,13]
 sum = 0
 for num in list_numbers:
     sum = sum + num
-print(f"Sum of the numbers in the list {list_numbers} is {sum}\n")
+print(f"   Sum of the numbers in the list {list_numbers} is {sum}\n")
 
 #5. Write a program to check if a given number is even or odd.
 print("5. Write a program to check if a given number is even or odd.")
@@ -43,25 +47,27 @@ def check_odd_or_even(num_to_be_checked):
     else:
         return "Odd"
 
-print(f"5 is {check_odd_or_even(5)} number")
-print(f"4 is {check_odd_or_even(4)} number\n")
+print(f"   5 is {check_odd_or_even(5)} number")
+print(f"   4 is {check_odd_or_even(4)} number\n")
 
 #6. Generate a random number between 1 and 100 and ask the user to guess it.
 print("6. Generate a random number between 1 and 100 and ask the user to guess it.")
 
-import random
+
+
 sys_random_num = random.randrange(1,100)
-user_rand_num = input("System has generated a random number. Can you guess it?")
+user_rand_num = input("   System has generated a random number. Can you guess it?")
 
 if(sys_random_num == user_rand_num):
     print("Your guess {user_rand_num} is correct\n")
 else:
-    print(f"Your guess {user_rand_num} is incorrect as system generated random number was {sys_random_num}\n")
+    print(f"   Your guess {user_rand_num} is incorrect as system generated random number was {sys_random_num}\n")
 
+time.sleep(3)
 #7. Write a function to check if a given string is a palindrome.
 print("7. Write a function to check if a given string is a palindrome.")
 
-import math
+
 def check_palindrome(word):
         length_word = len(word)
         start = 0
@@ -83,9 +89,9 @@ def check_palindrome(word):
 
 def diplay_palidrome_results(word):
     if (check_palindrome(word)):
-        print(f"Word {word} is a palidrome.\n")
+        print(f"   Word {word} is a palidrome.\n")
     else: 
-        print(f"Word {word} is not a palidrome.\n")
+        print(f"   Word {word} is not a palidrome.\n")
 
 diplay_palidrome_results("Madam")
 diplay_palidrome_results("Palindrome")
@@ -99,17 +105,16 @@ def find_factorial(num):
         return 1
     else:
         return num * (num -1)
-print(f"The factorial of number 5 is {find_factorial(5)}\n")
+print(f"   The factorial of number 5 is {find_factorial(5)}\n")
 
 #9. Write a program to find the largest element in a list.
 print("9. Write a program to find the largest element in a list.")
 
 max_num  = max(list_numbers)
-print(f"Largest number in the list {list_numbers} is {max_num}\n")
+print(f"   Largest number in the list {list_numbers} is {max_num}\n")
 
-#10 Create a simple calculator that can perform addition, subtraction, multiplication, and
-#division.
-
+#10 Create a simple calculator that can perform addition, subtraction, multiplication, and division.
+print("10 Create a simple calculator that can perform addition, subtraction, multiplication, and division.")
 def calculator_simulator(a,b,operation):
     match operation:
         case "Addition":        
@@ -143,9 +148,25 @@ operation = input("Please provide operation by either selecting serial number or
 
 print(f"Result of the above calculation is {calculator_simulator(first_number, second_number, operation)}\n")
 
+time.sleep(3)
 #11. Write a function to find the square root of a number using Newton's method.
 print("11. Write a function to find the square root of a number using Newton's method.")
-    
+def sql_root_iteration(xn,num):
+    xnp1 = (xn + (num/xn))/2
+    return xnp1
+
+def cal_newton_root(num):
+  listIterations = []
+  guess = num/2
+  for i in range(16):
+    guess = sql_root_iteration(guess,num)
+    listIterations.append(guess)
+  return listIterations[len(listIterations)-1]
+
+print(f"    Square root of 3 is {cal_newton_root(3)}")
+print(f"    Square root of 64 is {cal_newton_root(64)}")
+print(f"    Square root of 625 is {cal_newton_root(625)}\n")
+
 #12 Reverse a given list without using the reverse() method.
 print("12. Reverse a given list without using the reverse method.")
 
@@ -160,7 +181,7 @@ def rev_givent_str(inputList):
 
 list_str = ["1","2","3","4","5"]
 
-print(f"The reverse of the list {list_str} is {rev_givent_str(list_str)}\n")
+print(f"   The reverse of the list {list_str} is {rev_givent_str(list_str)}\n")
 
 #13. Write a program to find all the prime numbers between 1 and 100.
 print("13. Write a program to find all the prime numbers between 1 and 100.")
@@ -184,7 +205,7 @@ def find_prime_lt(num):
         checkNum = checkNum + 1
     return list_prime
 
-print(f"List of prime numbers less than 100 is {find_prime_lt(100)}")
+print(f"   List of prime numbers less than 100 is {find_prime_lt(100)}\n")
 
 #14. Calculate the Fibonacci sequence up to a given number.
 print(f"14. Calculate the Fibonacci sequence up to a given number.")
@@ -208,8 +229,9 @@ def find_fibonacdi_lt(sum):
         less_than = less_than + 1
     return ""
 
-print(f"Print all the find_fibonacci numbers less than 30")
+print(f"   Print all the find_fibonacci numbers less than 30")
 find_fibonacdi_lt(30)
+print("\n")
 
 #15. Write a function to count the number of vowels in a given string.
 print("15. Write a function to count the number of vowels in a given string.")
@@ -222,11 +244,12 @@ def count_vowels(given_str):
             count = count + 1
     return count
 
-print(f"The number of vowels in string {'experiment'} are {count_vowels('experiment')}")
-print(f"The number of vowels in string {'vowels'} are {count_vowels('vowels')}")
-print(f"The number of vowels in string {'rythm'} are {count_vowels('rythm')}\n")
+print(f"    The number of vowels in string {'experiment'} are {count_vowels('experiment')}")
+print(f"    The number of vowels in string {'vowels'} are {count_vowels('vowels')}")
+print(f"    The number of vowels in string {'rythm'} are {count_vowels('rythm')}\n")
 
 #16 Check if a given year is a leap year.
+print("16 Check if a given year is a leap year.")
 
 def check_leap_year(input_year):
     if input_year % 4 == 0:
@@ -234,8 +257,8 @@ def check_leap_year(input_year):
     else:
         return "non leap year"
     
-print(f"Year 2024 is  a {check_leap_year(2024)}")
-print(f"Year 2025 is  a {check_leap_year(2025)}\n")
+print(f"   Year 2024 is  a {check_leap_year(2024)}")
+print(f"   Year 2025 is  a {check_leap_year(2025)}\n")
 
 #17. Remove duplicates from a list without using sets.
 print("17. Remove duplicates from a list without using sets.")
@@ -248,8 +271,8 @@ def remove_duplicates(listOrig):
     return listUniq
 
 listOrig = [1,2,3,3,4,5,5,7,7,7,7]
-print(f"original list {listOrig}")
-print(f"list after removal of duplicates {remove_duplicates(listOrig)}\n")
+print(f"    Original list {listOrig}")
+print(f"    List after removal of duplicates {remove_duplicates(listOrig)}\n")
 
 #18. Write a program to sort a list of numbers using bubble sort.
 print("18. Write a program to sort a list of numbers using bubble sort.")
@@ -264,16 +287,16 @@ def bubble_sort(listOrig):
                listOrig[y] = z
     return listOrig
 listOrig = [4,3,6,5,1,0,8]
-print(f"original list {listOrig}")
-print(f"list after bubble sort  {bubble_sort(listOrig)}\n")
+print(f"    Original list {listOrig}")
+print(f"    List after bubble sort  {bubble_sort(listOrig)}\n")
 
 
 #19. Create a dictionary of names and ages, and print the name of the oldest person.
 print("19. Create a dictionary of names and ages, and print the name of the oldest person.")
 old_age = {"John":"58","Dow":"67","Paul":"60","Zen":"65"}
-print(f"The old age dictionary looks like {old_age}")
+print(f"    The old age dictionary looks like {old_age}")
 oldest_person = [name for name, age in old_age.items() if age == max(old_age.values())]
-print(f"The oldest person in the above dictionary is {str(oldest_person)[2:-21]}")
+print(f"    The oldest person in the above dictionary is {str(oldest_person)[2:-21]}")
 
 #20. Write a program to find the least common multiple (LCM) of two numbers.
 print("20. Write a program to find the least common multiple (LCM) of two numbers.")
@@ -297,6 +320,6 @@ def find_lcm(num1, num2):
         
     return lcm
 
-print(f"LCM of numers 2,3 is {find_lcm(2,3)}")
-print(f"LCM of numers 10,15 is {find_lcm(10,15)}")
+print(f"    LCM of numers 2,3 is {find_lcm(2,3)}")
+print(f"    LCM of numers 10,15 is {find_lcm(10,15)}")
 
