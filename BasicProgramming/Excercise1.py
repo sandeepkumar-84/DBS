@@ -66,7 +66,7 @@ else:
     print(f"   Your guess {user_rand_num} is incorrect as system generated random number was {sys_random_num}\n")
 
 # Sleep/delay is added so that user can check the result and then other code is executed
-time.sleep(3)
+time.sleep(2)
 #7. Write a function to check if a given string is a palindrome.
 print("7. Write a function to check if a given string is a palindrome.")
 
@@ -154,7 +154,7 @@ operation = input("Please provide operation by either selecting serial number or
 
 print(f"Result of the above calculation is {calculator_simulator(first_number, second_number, operation)}\n")
 # Sleep/delay is added so that user can check the result and then other code is executed
-time.sleep(3)
+time.sleep(2)
 
 #11. Write a function to find the square root of a number using Newton's method.
 print("11. Write a function to find the square root of a number using Newton's method.")
@@ -316,7 +316,7 @@ print(f"    The old age dictionary looks like {old_age}")
 
 #items of the dictionary is queried for max age value
 oldest_person = [name for name, age in old_age.items() if age == max(old_age.values())]
-print(f"    The oldest person in the above dictionary is {str(oldest_person)[2:-21]}")
+print(f"    The oldest person in the above dictionary is {str(oldest_person)[2:-2]}")
 
 #20. Write a program to find the least common multiple (LCM) of two numbers.
 print("20. Write a program to find the least common multiple (LCM) of two numbers.")
