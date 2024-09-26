@@ -295,7 +295,6 @@ print(f"    List after removal of duplicates {remove_duplicates(listOrig)}\n")
 #18. Write a program to sort a list of numbers using bubble sort.
 print("18. Write a program to sort a list of numbers using bubble sort.")
 
-
 def bubble_sort(listOrig):
     for x in range(0,len(listOrig)):
         for y in range(x+1,len(listOrig)-1):
@@ -321,7 +320,7 @@ print(f"    The oldest person in the above dictionary is {str(oldest_person)[2:-
 #20. Write a program to find the least common multiple (LCM) of two numbers.
 print("20. Write a program to find the least common multiple (LCM) of two numbers.")
 
-#basic approach of  is used
+#basic approach   is used
 # lists for first input numbers is created, this will hold the multipliers of the num1 like num1*1, num1*2....
 # lists for first input numbers is created, this will hold the multipliers of the num2 like num2*1, num2*2.... 
 # inner for loop, loops through first list and check each item in list 2. If item is present then it is the lcm and loop breaks 
