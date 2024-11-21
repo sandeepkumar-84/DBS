@@ -8,10 +8,14 @@ print("Checking database connection.................")
 print("Creating database .................")
 DatabaseHandling.db_create_db()
 
-print("Creating table .................")
+print("Creating table holiday .................")
 DatabaseHandling.db_create_table_holiday()
 
-print("Populating table .................")
+print("Populating table holiday.................")
 DatabaseHandling.db_populate_table_holiday(list_holidays)
 
+print("Creating table sales_data .................")
+DatabaseHandling.db_create_table_retail_online()
 
+print("Populating table sales_data.................")
+DatabaseHandling.db_populate_table_retail_online()

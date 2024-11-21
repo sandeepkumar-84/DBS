@@ -1,4 +1,5 @@
 import csv
+import os
 import psycopg2
 import configparser
 
@@ -14,6 +15,11 @@ db_database = config['database']['db']
 
 base_path = config['basepath']['assignment_path']
 ds_directory = config['ds_dir']['cafe_item_dir']
+
+online_retail_ds_file_name = config['datasetFileName']['online_retail_ds_file_name'] 
+online_retail_ds_file_path = os.path.join(base_path, ds_directory, online_retail_ds_file_name)
+
+
 
 #establish a connection with POSTGRESQL
 
@@ -80,11 +86,14 @@ def db_populate_table_holiday(dates_holiday):
         #extract data from database store in the variable
         cursor_obj = connection.cursor()
         
+        truncate_table = "TRUNCATE TABLE sales_data;"
+        cursor_obj.execute(truncate_table)
+        connection.commit()
+
         for items in dates_holiday:
             cursor_obj.execute(
         "INSERT INTO tbl_holiday_list (holiday_date) VALUES (%s)", (str(items),)
-    )
-                    
+    )                    
 
         connection.commit()
         cursor_obj.close()
@@ -94,12 +103,7 @@ def db_populate_table_holiday(dates_holiday):
     except Exception as e:
         print("Error while connecting to PostgreSQL:", e)
 
-#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==================
-
-
-            
-
-def db_create_tables():
+def db_create_table_retail_online():    
     try:
         connection = db_check_connection()
         
@@ -108,35 +112,55 @@ def db_create_tables():
         
         #create table for  holiday list into postgreSQL
         cursor_obj.execute("""
-                        CREATE TABLE IF NOT EXISTS tbl_holiday_list (
-                            holiday_date varchar(20)
-                        )
-        """)
+                        CREATE TABLE IF NOT EXISTS  sales_data (
+                                                    InvoiceNo VARCHAR(20),
+                                                    StockCode VARCHAR(20),
+                                                    Description TEXT,
+                                                    Quantity INT,
+                                                    InvoiceDate TIMESTAMP,
+                                                    UnitPrice DECIMAL(10, 2),
+                                                    CustomerID VARCHAR(20),
+                                                    Country VARCHAR(50)
+                                                )
+                        """)
         connection.commit()
-        truncate_table = "TRUNCATE TABLE tbl_holiday_list;"
+        cursor_obj.close()
+        connection.close()
+
+        print(f"Table sales_data created sucessfully")        
+    except Exception as e:
+        print("Error while connecting to PostgreSQL:", e)  
+
+
+def db_populate_table_retail_online():    
+    try:
+        connection = db_check_connection()
+        
+        #extract data from database store in the variable
+        cursor_obj = connection.cursor()
+        
+        truncate_table = "TRUNCATE TABLE sales_data;"
         cursor_obj.execute(truncate_table)
         connection.commit()
-
-        print(f"Table tbl_holiday_list created sucessfully")
-
         #insert data from csv file to table tbl_cafeItem
-
-        print(f"From database")
-        for items in dates_holiday:
-            print(items)
-
-        '''with open(cafe_ds_path, 'r') as f:
+        with open(online_retail_ds_file_path, 'r') as f:
             reader = csv.reader(f)
             next(reader)
             for row in reader:
                 cursor_obj.execute(
-                    "INSERT INTO tbl_cafeItem (sell_id, sell_category, item_id, item_name) VALUES (%s, %s, %s, %s)",
+                    "INSERT INTO sales_data(InvoiceNo,StockCode,Description,Quantity,InvoiceDate,UnitPrice,CustomerID,Country) VALUES (%s, %s, %s, %s,%s, %s, %s, %s)",
                     row
                 )
-        connection.commit()'''
-            
-        print(f"Table tbl_holiday_list created & populated successfully")    
+        connection.commit()        
+                         
+
+        connection.commit()
         cursor_obj.close()
         connection.close()
+
+        print(f"Table sales_data populated sucessfully")        
     except Exception as e:
-        print("Error while connecting to PostgreSQL:", e)
+        print("Error while connecting to PostgreSQL:", e)        
+
+#=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==================
+      
