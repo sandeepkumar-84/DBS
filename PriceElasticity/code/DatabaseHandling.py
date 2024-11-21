@@ -1,5 +1,6 @@
 import csv
 import os
+import pandas as pd
 import psycopg2
 import configparser
 
@@ -161,6 +162,37 @@ def db_populate_table_retail_online():
         print(f"Table sales_data populated sucessfully")        
     except Exception as e:
         print("Error while connecting to PostgreSQL:", e)        
+
+def fetch_to_dataframe(query):
+    try:
+        connection = db_check_connection()        
+        #extract data from database store in the variable
+        cursor_obj = connection.cursor()
+
+        cursor_obj.execute(query)
+        columns = [desc[0] for desc in cursor_obj.description]
+        data = cursor_obj.fetchall()
+        df = pd.DataFrame(data, columns=columns)
+        connection.commit()
+        cursor_obj.close()
+        connection.close() 
+        return df
+    except Exception as e:
+        print("Error while connecting to PostgreSQL:", e) 
+
+print(f"Loading data into data frame sucessfull")
+
+
+def load_datasets():
+    query1 = "SELECT * FROM sales_data" 
+    query2 = "SELECT * FROM tbl_holiday_list"
+
+    df_sale_data = fetch_to_dataframe(query1)
+    print(f"Shape of Cafe Item Data Set =", df_sale_data.shape)
+    df_holiday_list = fetch_to_dataframe(query2)
+    print(f"Shape of Cafe Item Transactional Data Set =", df_holiday_list.shape)
+    return df_sale_data, df_holiday_list
+       
 
 #=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==================
       

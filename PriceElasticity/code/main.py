@@ -19,3 +19,9 @@ DatabaseHandling.db_create_table_retail_online()
 
 print("Populating table sales_data.................")
 DatabaseHandling.db_populate_table_retail_online()
+
+print("Load tables into datasets.................")
+df_sales, df_holiday = DatabaseHandling.load_datasets()
+
+print(f"froma main............{df_sales.shape}")
+print(f"froma main............{df_holiday.shape}")
