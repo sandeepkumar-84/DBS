@@ -1,4 +1,18 @@
-################ Implementing UI#######################
+'''
+    Model Prediction File - Middle layer to load, execute the model to predict the intent and generate response. 
+
+    This file implements the code to generate the response to the user interacting through the chabot UI interface. 
+    It creates the dictionary from the intent.js file and then load the pre-trained model 
+    (model developed , trained and pushed to repository in the colab file submitted with the project). 
+    Generated response is passes back to the UI interface. 
+    
+    Created by: Sandeep Kumar
+    Student ID: 20049275
+    University: DBS
+    Module Title: Programming for Data Analysis Project
+    Lecturer: Alexander Victor
+
+'''
 
 try:
     import pandas as pd
