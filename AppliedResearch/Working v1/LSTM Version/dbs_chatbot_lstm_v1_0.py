@@ -50,6 +50,14 @@ from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
 from bert_score import score as bert_score
 import torch.nn.functional as F
 
+# for visulizations
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt_lstm
+import matplotlib
+from collections import Counter
+
+import requests
+
 import nltk
 nltk.download('punkt')
 nltk.download('punkt_tab')
@@ -64,7 +72,8 @@ Below code fetches data by loopinig through,the training data files (json file) 
 '''Input folder path - in this case it is google colab notebook directory path.
 In case of python code file it will be changed local system or github path '''
 
-folder_path = "/content/Research-Chatbot/Training"
+github_url_training  = "https://raw.githubusercontent.com/sandeepkumar-84/DBS/dbs_applied_research_project_v1/AppliedResearch/Working%20v1/LSTM%20Version/Training_set_v2.json"
+folder_path_training = "/content/Research-Chatbot/Training"
 
 # variable that holds the question answers pairs extracted from the json input file.
 qa_pairs_combined_raw = []
@@ -73,32 +82,52 @@ qa_pairs_combined_raw = []
 if the data obtained is not a list that pair will be skipped. Else it will be appended to another global variable qa_pairs_combined_raw
 whole loop is wrapped in the try cactch block so that in case of any exception it can be raised or printed'''
 
-for file_name in os.listdir(folder_path):
-    file_path = os.path.join(folder_path, file_name)
-    if file_name.endswith('.json'):
-        try:
-            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                qa_list = json.load(f)
-                if isinstance(qa_list, list):
-                    qa_pairs_combined_raw.extend(qa_list)
-                    print(f" QA Pairs Loaded {len(qa_list)} from file : {file_name}")
-                else:
-                    print(f"Skipping the file {file_name}: as its is not a list of QA pairs.")
-        except json.JSONDecodeError:
-            print(f"error in reading the JSON file : {file_name}")
-        except Exception as e:
-            print(f"error reading {file_name}: {e}")
-    else:
-        print(f"Skipping non-JSON file: {file_name}")
+def load_github_file(file_url):
+    try:
+        response = requests.get(file_url)
+        if response.status_code == 200:
+            qa_list = response.json()
+            if isinstance(qa_list, list):
+                qa_pairs_combined_raw.extend(qa_list)
+                print(f"QA Pairs Loaded {len(qa_list)} from GitHub file: {file_url}")
+                return True
+            else:
+                print(f"Skipping GitHub file {file_url}: not a list of QA pairs.")
+        else:
+            print(f"GitHub file not found: {file_url} (status code {response.status_code})")
+    except Exception as e:
+        print(f"Error reading GitHub file {file_url}: {e}")
+    return False
+
+def load_local_files():
+  for file_name in os.listdir(folder_path_training):
+      file_path_training = os.path.join(folder_path_training, file_name)
+      if file_name.endswith('.json'):
+          try:
+              with open(file_path_training, 'r', encoding='utf-8', errors='ignore') as f:
+                  qa_list = json.load(f)
+                  if isinstance(qa_list, list):
+                      qa_pairs_combined_raw.extend(qa_list)
+                      print(f" QA Pairs Loaded {len(qa_list)} from file : {file_name}")
+                  else:
+                      print(f"Skipping the file {file_name}: as its is not a list of QA pairs.")
+          except json.JSONDecodeError:
+              print(f"error in reading the JSON file : {file_name}")
+          except Exception as e:
+              print(f"error reading {file_name}: {e}")
+      else:
+          print(f"Skipping non-JSON file: {file_name}")
+
+
+
+if not load_github_file(github_url_training):
+    load_local_files(folder_path_training)
 
 qa_pairs = qa_pairs_combined_raw
 
+print(f"total QA pairs loaded: {len(qa_pairs)}")
+
 """below plot shows the wordcloud representation of the training data. The font size and the dark font color represent the higher frequency of that wordin the training data."""
-
-from wordcloud import WordCloud
-import matplotlib.pyplot as plt
-import matplotlib
-
 
 all_text = " ".join([q["query"].lower() for q in qa_pairs_combined_raw])
 
@@ -107,25 +136,24 @@ wordcloud_alltext = WordCloud(width=800, height=400, background_color='white',
                       colormap='viridis', max_words=100).generate(all_text)
 
 
-plt.figure(figsize=(10, 5))
-plt.imshow(wordcloud_alltext, interpolation='bilinear')
-plt.axis('off')
-plt.title("Word Cloud of Training Questions", fontsize=16)
-plt.show()
+plt_lstm.figure(figsize=(10, 5))
+plt_lstm.imshow(wordcloud_alltext, interpolation='bilinear')
+plt_lstm.axis('off')
+plt_lstm.title("Word Cloud of Training Questions", fontsize=16)
+plt_lstm.show()
 
-from collections import Counter
 all_words = all_text.split()
 word_freq = Counter(all_words)
 top_words = word_freq.most_common(10)
 words, counts = zip(*top_words)
-plt.figure(figsize=(10, 6))
-plt.bar(words, counts, color='lightgrey', edgecolor='black')
-plt.title("Top 10 Most Frequent Words in Vocabulary", fontsize=16)
-plt.xlabel("Words", fontsize=14)
-plt.ylabel("Frequency", fontsize=14)
-plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
+plt_lstm.figure(figsize=(10, 6))
+plt_lstm.bar(words, counts, color='lightgrey', edgecolor='black')
+plt_lstm.title("Top 10 Most Frequent Words in Vocabulary", fontsize=16)
+plt_lstm.xlabel("Words", fontsize=14)
+plt_lstm.ylabel("Frequency", fontsize=14)
+plt_lstm.xticks(rotation=45)
+plt_lstm.tight_layout()
+plt_lstm.show()
 
 """**1.2 Data cleaning** - text normalization through lowercasing and triming    whitespaces.
 
@@ -139,9 +167,9 @@ Explanation of the code - It initializes the model parameters and prepares a dat
 """
 
 # Defines the size of word embedding vectors
-embedding_dim = 100
+embedding_dim_lstm = 100
 # number of hidden units in the hidden layers
-hidden_dim = 128
+hidden_dim_lstm = 128
 #max length of the input sequence
 max_len = 20
 
@@ -174,11 +202,11 @@ def encode_question(q):
 wordcloud_vocab = WordCloud(width=800, height=400, background_color='white',
                       colormap='viridis', max_words=100).generate(" ".join(vocab.keys()))
 
-plt.figure(figsize=(10, 5))
-plt.imshow(wordcloud_vocab, interpolation='bilinear')
-plt.axis('off')
-plt.title("Word Cloud of vocab", fontsize=16)
-plt.show()
+plt_lstm.figure(figsize=(10, 5))
+plt_lstm.imshow(wordcloud_vocab, interpolation='bilinear')
+plt_lstm.axis('off')
+plt_lstm.title("Word Cloud of vocab", fontsize=16)
+plt_lstm.show()
 
 """**1.6 Vectorization\Embeddings** - LSTM model includes an embedding layer which is initialized with vcab size and dimensions = 100.
 
@@ -189,12 +217,12 @@ Its init function sets the embedding layers, lstm layer and fuly converted layer
 """
 
 # torch library is utilized below.
-class LSTMEncoder(nn.Module):
-    def __init__(self, vocab_size, embedding_dim, hidden_dim):
-        super(LSTMEncoder, self).__init__() # calling the base class constructor
-        self.embedding = nn.Embedding(vocab_size, embedding_dim) # embedding layer to map word ids to vectors
-        self.lstm = nn.LSTM(embedding_dim, hidden_dim, batch_first=True) # LSTM layer to catch semantic patterns
-        self.fc = nn.Linear(hidden_dim, hidden_dim) # to transform hidden state fully connected layer is returned.
+class LSTMEncoderClass(nn.Module):
+    def __init__(self, vocab_size, embedding_dim_lstm, hidden_dim_lstm):
+        super(LSTMEncoderClass, self).__init__() # calling the base class constructor
+        self.embedding = nn.Embedding(vocab_size, embedding_dim_lstm) # embedding layer to map word ids to vectors
+        self.lstm = nn.LSTM(embedding_dim_lstm, hidden_dim_lstm, batch_first=True) # LSTM layer to catch semantic patterns
+        self.fc = nn.Linear(hidden_dim_lstm, hidden_dim_lstm) # to transform hidden state fully connected layer is returned.
 
     def forward(self, input_ids):
         embedded = self.embedding(input_ids) # tokens are converted to embeddings
@@ -208,7 +236,7 @@ Below code encode all the questions and stacks them. Then initializes the LSTM m
 
 encoded_questions = torch.stack([encode_question(q) for q in questions])
 
-model = LSTMEncoder(vocab_size=vocab_size, embedding_dim=embedding_dim, hidden_dim=hidden_dim)
+model = LSTMEncoderClass(vocab_size=vocab_size, embedding_dim_lstm=embedding_dim_lstm, hidden_dim_lstm=hidden_dim_lstm)
 # Set the model to evaluation mode
 model.eval()
 
@@ -307,7 +335,7 @@ def evaluate_lstm_model(test_set, model, qa_pairs, vocab, max_len, question_vecs
         query = item["query"]
         expected = item["expected_answer"]
 
-        start_time = time.time() # to track the inference time
+        start_time_lstm = time.time() # to track the inference time
         input_vec = encode_question(query).unsqueeze(0) # input query is encode into vector
         with torch.no_grad():
             query_embedding = model(input_vec).float() # get the corresponding embedding
@@ -320,8 +348,8 @@ def evaluate_lstm_model(test_set, model, qa_pairs, vocab, max_len, question_vecs
         else:
             generated = "I'm sorry, I don't know the answer."
 
-        response_time = time.time() - start_time
-        total_time += response_time
+        response_time_lstm = time.time() - start_time_lstm
+        total_time += response_time_lstm
 
         # Exact Match is calculated for the accuracy
         exact_match = int(expected.lower() in generated.lower()) if expected else 0
@@ -336,7 +364,7 @@ def evaluate_lstm_model(test_set, model, qa_pairs, vocab, max_len, question_vecs
             "Expected": expected,
             "ExactMatch": exact_match,
             "BLEU": bleu,
-            "TimeTaken": response_time
+            "TimeTaken": response_time_lstm
         })
 
         all_generated.append(generated)
@@ -353,16 +381,16 @@ def evaluate_lstm_model(test_set, model, qa_pairs, vocab, max_len, question_vecs
     else:
         avg_bertscore_f1 = 0.0
 
-    # Summary
-    accuracy = sum(r["ExactMatch"] for r in results) / len(results)
-    avg_bleu = sum(r["BLEU"] for r in results) / len(results)
-    avg_time = total_time / len(results)
+
+    accuracy_lstm = sum(r["ExactMatch"] for r in results) / len(results)
+    avg_bleu_lstm = sum(r["BLEU"] for r in results) / len(results)
+    avg_time_lstm = total_time / len(results)
 
     print("\n--- Evaluation Summary ---")
-    print(f"Accuracy (Exact Match): {accuracy:.2f}")
-    print(f"Average BLEU Score: {avg_bleu:.2f}")
+    print(f"Accuracy (Exact Match): {accuracy_lstm:.2f}")
+    print(f"Average BLEU Score: {avg_bleu_lstm:.2f}")
     print(f"Average BERTScore F1: {avg_bertscore_f1:.2f}")
-    print(f"Average Response Time: {avg_time:.2f}s")
+    print(f"Average Response Time: {avg_time_lstm:.2f}s")
 
     return results
 
@@ -384,7 +412,7 @@ Below code load the test file from the provided file path
 file_path = r"/content/Research-Chatbot/Testing/LSTM_Testing_DataSet.json"
 test_set = []
 # Load test_set from file
-def load_test_set(path):
+def load_test_set_lstm(path):
     if not os.path.exists(path):
         raise FileNotFoundError(f"File {path} does not exist.")
     with open(path, "r", encoding="utf-8") as f:
@@ -393,7 +421,7 @@ def load_test_set(path):
 
 if __name__ == "__main__":
     try:
-        test_set = load_test_set(file_path)
+        test_set = load_test_set_lstm(file_path)
         print("Test set loaded successfully.")
         for item in test_set:
             print(f"Query: {item.get('query', '')}")
