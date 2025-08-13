@@ -54,7 +54,9 @@ import nltk
 nltk.download('punkt')
 nltk.download('punkt_tab')
 
-"""#Part-I Data Preprocessing
+"""#Part-1 Data Preprocessing and model training
+
+**1.1 Data Collection**
 
 Below code fetches data by loopinig through,the training data files (json file) from a particular location and populates a list variable with questions and answers pair.
 """
@@ -91,7 +93,50 @@ for file_name in os.listdir(folder_path):
 
 qa_pairs = qa_pairs_combined_raw
 
-"""below code initializes the model parameters and prepares a datset of questions and answers. Then it builds a vocabolary from words in all the questions so that they can be coverted into vectors later by encoding function.  """
+"""below plot shows the wordcloud representation of the training data. The font size and the dark font color represent the higher frequency of that wordin the training data."""
+
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+import matplotlib
+
+
+all_text = " ".join([q["query"].lower() for q in qa_pairs_combined_raw])
+
+
+wordcloud_alltext = WordCloud(width=800, height=400, background_color='white',
+                      colormap='viridis', max_words=100).generate(all_text)
+
+
+plt.figure(figsize=(10, 5))
+plt.imshow(wordcloud_alltext, interpolation='bilinear')
+plt.axis('off')
+plt.title("Word Cloud of Training Questions", fontsize=16)
+plt.show()
+
+from collections import Counter
+all_words = all_text.split()
+word_freq = Counter(all_words)
+top_words = word_freq.most_common(10)
+words, counts = zip(*top_words)
+plt.figure(figsize=(10, 6))
+plt.bar(words, counts, color='lightgrey', edgecolor='black')
+plt.title("Top 10 Most Frequent Words in Vocabulary", fontsize=16)
+plt.xlabel("Words", fontsize=14)
+plt.ylabel("Frequency", fontsize=14)
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+"""**1.2 Data cleaning** - text normalization through lowercasing and triming    whitespaces.
+
+**1.3 Tokenization** - Word level tokenization through NLTK word tokenization. It is used for building vocabolary and from all training questions and encoding user query.
+
+**1.4 Vocabulary Creation** - vocab is created using all unique words in the training questions. special tokens are added for unknown words and for sequence padding.
+
+**1.5 Encoding & Padding** - encoding function tokenizes input question, convert tokens to id from vocab, pads or truncates sequence to fixed length of max 20 and retuns a pytocrch tensor.
+
+Explanation of the code - It initializes the model parameters and prepares a datset of questions and answers. Then it builds a vocabolary from words in all the questions so that they can be coverted into vectors later by encoding function.  
+"""
 
 # Defines the size of word embedding vectors
 embedding_dim = 100
@@ -124,7 +169,20 @@ def encode_question(q):
     padded = idxs[:max_len] + [0] * (max_len - len(idxs))
     return torch.tensor(padded)
 
-"""#Part II LSTM Model training
+"""below plot shows the wordcloud representation of the vocab data. The font size and the dark font color represent the higher frequency of that word in the vocab."""
+
+wordcloud_vocab = WordCloud(width=800, height=400, background_color='white',
+                      colormap='viridis', max_words=100).generate(" ".join(vocab.keys()))
+
+plt.figure(figsize=(10, 5))
+plt.imshow(wordcloud_vocab, interpolation='bilinear')
+plt.axis('off')
+plt.title("Word Cloud of vocab", fontsize=16)
+plt.show()
+
+"""**1.6 Vectorization\Embeddings** - LSTM model includes an embedding layer which is initialized with vcab size and dimensions = 100.
+
+**1.7 Model Definition (LSTM Encoder)** - embedding layer converts tokens into dense vectors, lstm layer is for capturing dependencies size-128 and fully connected layer transforms last hidden state to vector. this will give the dense vector representation of the query.  
 
 Following code is a class whose functionality is to provide LSTM based encoder
 Its init function sets the embedding layers, lstm layer and fuly converted layer
@@ -143,7 +201,8 @@ class LSTMEncoder(nn.Module):
         _, (hidden, _) = self.lstm(embedded) # fetches final hidden state from LSTM
         return self.fc(hidden[-1])  # return the last hiddeb layer
 
-"""Below code encode all the questions and stacks them. Then initializes the LSTM model and generate vector embeddings.
+"""**1.8 Precomputing Training Question Embeddings** - All training questions are encoded and passed through model in evaluation mode, embeddings are stored in a variable for cosine similarity lookups.
+Below code encode all the questions and stacks them. Then initializes the LSTM model and generate vector embeddings.
 
 """
 
@@ -157,7 +216,10 @@ model.eval()
 with torch.no_grad():
     question_vecs_tensor = model(encoded_questions).float()
 
-"""Below code provides a sample chatbot functionality (non ui based) to test the above code."""
+"""Below code provides a sample chatbot functionality (non ui based) to test the above code.
+
+User inputs query which is then lowercased and trimmed for whitespaces, it is then encoded and passed through model to get embeddings, cosine similarity is computed against precomputed training questions embeddings. torch argmax is used to get the best matching index. if the similarity score is less than the 0.6 then usr is returned with message that "sorry, i dont understand" otherwise the corresponding answer is returned.
+"""
 
 ''' lstm version of the chatbot functionality. While loop provides continues interaction until user inputs exit.
 '''
@@ -187,17 +249,49 @@ def lstm_chatbot():
 # execute the function to start the sample chatbot
 lstm_chatbot()
 
-"""#Part-III Evaluation Pipeline
+"""#Part-II Evaluation Pipeline
 This section is focussed on the evaluation of the LST version of the DBS specific chatbot developed in the first part
+
+**1.9 Model Evaluation** - Evaluation is performed using function evaluate_lstm_model(). It evaluate the lstm model and contains all the different evaluation parameters required for the overall benchmarking
+
+
+
+*    Test set - contains the test data(json format). It has  question and expected answers pairs
+
+*   model -
+
+*   qa_pairs - full set of question answer pairs
+
+*   vocab  - mapping of words to ids
+*   max_len - max ecoding legth for tokens
+
+
+*   question_vecs_tensor - pre computed embeddings for all training questions
+
+
+*   threshold - float variable a cosine similarity threshold for considering a match
+
+
+*  return - detailed result of the evaluation
+
+Evaluation Metrics used are :
+
+Exact Match Accuracy → proportion of exact match of the response generated with the expected.
+
+BLEU Score → n-gram overlap using NLTK with smoothing.
+
+BERTScore-F1 → It gives semantic similarity using pretrained BERT embeddings.
+
+Average Response Time → per-query inference time.
+
+
 """
 
 '''
 The function below evaluate the lstm model and contains all the different evaluation parameters required for the overall benchmarking
-first parameter Test set contains the test data. It is again in json format and has the question and expected answers pairs.
-next parameter is the dbs specific trained model itself, qa_pairs is the full set of question answer pairs, vocab is the mapping of words to ids,
-max_len is the max ecoding legth for tokens, question_vecs_tensor is a pre computed embeddings for all training questions.
-threshold is a float variable and a cosine similarity threshold for considering a match.
-functions finally returns the detailed result of the evaluation
+
+
+
 '''
 def evaluate_lstm_model(test_set, model, qa_pairs, vocab, max_len, question_vecs_tensor, threshold=0.5):
     results = []
@@ -320,6 +414,6 @@ results = evaluate_lstm_model(
     threshold=0.5
 )
 
-"""Display the results"""
+"""**1.10 Output**"""
 
 results
