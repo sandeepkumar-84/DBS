@@ -247,8 +247,9 @@ def start_chatbot(top_k=3):
         print("-" * 60)
 
 
-start_chatbot()
+#start_chatbot()
 
+'''
 model_id_tinyllm_dbs = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
 tokenizer_tinyllm_dbs = AutoTokenizer.from_pretrained(model_id_tinyllm_dbs)
 model_tinyllm_dbs = AutoModelForCausalLM.from_pretrained(model_id_tinyllm_dbs, device_map="auto", torch_dtype="auto")
@@ -283,9 +284,9 @@ Convert the following text to a chatbot response. Add greetings and ask the user
 query = "How many books does the DBS Library have?"
 raw_answer = "over 43,000"
 
-refined = refine_answer_llama(query, raw_answer)
-print("📘 Refined Answer:", refined)
-
+#refined = refine_answer_llama(query, raw_answer)
+#print("📘 Refined Answer:", refined)
+'''
 
 file_path_test = r"/content/Research-Chatbot/Transformer_Test_DataSet.json"
 github_urls_test = "https://raw.githubusercontent.com/sandeepkumar-84/DBS/refs/heads/dbs_applied_research_project_v1/AppliedResearch/Working%20v1/Transformer%20Version/Transformer_Test_DataSet.json"
