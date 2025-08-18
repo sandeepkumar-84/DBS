@@ -81,18 +81,14 @@ local_repo_path = "./dbs-chatbot-transformer-hf-v3" # define a local path for th
 os.makedirs(local_save_path, exist_ok=True)
 os.makedirs(local_hf_save_path, exist_ok=True)
 
-git config --global user.email "sandeep.kumar_84@yahoo.co.in"
-git config --global user.name "Sandeep Kumar"
+!git config --global user.email "sandeep.kumar_84@yahoo.co.in"
+!git config --global user.name "Sandeep Kumar"
 
 """#Part-1 Data Preprocessing and model training
 **1.1 Data Collection**
 
 
 """
-
-import os
-import requests
-
 
 github_urls_training = [
     "https://raw.githubusercontent.com/sandeepkumar-84/DBS/refs/heads/dbs_applied_research_project_v1/AppliedResearch/Working%20v1/Transformer%20Version/Transformer_Training_DataSet-1.txt",
@@ -189,11 +185,7 @@ faiss.write_index(index_dbs, f"{local_save_path}/faiss_index_dbs.index")
 with open(f"{local_save_path}//corpus_dbs.json", "w") as f:
     json.dump(corpus_dbs, f)
 
-"""Reloading the above locallys saved model, corpus and indexes"""
-
-
-
-"""Belo code saves/deploys the model onto hugging face only if it is required(based on save_to_hf_required). In this case since it is already saved, the variable save_to_hf_required is set to false."""
+"""Below code saves/deploys the model onto hugging face only if it is required(based on save_to_hf_required). In this case since it is already saved, the variable save_to_hf_required is set to false."""
 
 hf_token = userdata.get('HF_TOKEN')
 login(token=hf_token)
@@ -217,7 +209,7 @@ if save_to_hf_required == True:
   print("saving to hugging face..............")
   save_to_hugging_face_repo()
 
-"""Below code retrieves it from hugging face"""
+"""local the saved model, corpus and indexes based on the mode_to_run variable set in the intial stages of the program"""
 
 # declare variables
 
@@ -283,6 +275,10 @@ def retrieve_passages(query, top_k=3):
     results = [corpus_dbs[idx] for idx in indices[0]]
     return results
 
+"""Commented intentionally -
+Below code is the prior implementation for testing each different types of trained model. It is combined into one based on the selected mode.
+"""
+
 '''
 converts query into embedding, find distances between query and passages, then retrieve the actual text passage from corpus.
 '''
@@ -337,6 +333,8 @@ for i, p in enumerate(passages):
 
 answer = generate_answer(query, passages)
 print("Generated Answer:\n", answer)
+
+"""Commented intentionally - below code was to test independently each different type of reloaded versions of the models. It is not required since we can change mode variable and use above code."""
 
 # below code was to test independently each different type of reloaded versions of the models. It is not required since we can change mode variable and use above code.
 '''
@@ -423,7 +421,7 @@ Convert the following text to a chatbot response. Add greetings and ask the user
         return full_output.split("<|assistant|>")[-1].strip()
     return full_output.strip()
 
-"""Sample code to get the refined answer from the raw answer"""
+"""Comented intentionally - Sample code to get the refined answer from the raw answer"""
 
 # below code is just to tes the refined answer. Since due to limited scope of the work and time it is commented as it takes lot of time to generate the answer.
 '''
