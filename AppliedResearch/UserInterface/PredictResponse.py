@@ -1,23 +1,13 @@
-try:
-    from sentence_transformers import SentenceTransformer
-    import faiss
-    import os
-    import nltk
-    from huggingface_hub import snapshot_download
-    import json
-    from transformers import T5ForConditionalGeneration, T5Tokenizer
-except ImportError:
-    print("Required libraries not found. Installing...")
-    import pip
-    pip.main(['install','pandas','nltk' ,'transformers', 'torch'])
+from sentence_transformers import SentenceTransformer
+import faiss
+import os
+import nltk
+from huggingface_hub import snapshot_download
+import json
+from transformers import T5ForConditionalGeneration, T5Tokenizer
 
 
-try:
-    nltk.data.find('tokenizers/punkt')    
-except LookupError:
-    print("punkt not found. Attempting its download....")
-    nltk.download('punkt')
-    print("punkt has been downloaded........")
+nltk.download('punkt')
 
 from IntentCommonResponse import detect_intent_and_respond
 

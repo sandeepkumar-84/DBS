@@ -22,7 +22,7 @@ class DBSResearchChatbotApp:
     def _setup_main_chat_window(self):
         self.window.title("DBS Research Chatbot")
         self.window.resizable(width=False, height=False)
-        self.window.configure(width=450, height=500, bg=BODY_BACK_COL)
+        self.window.configure(width=460, height=500, bg=BODY_BACK_COL)
 
         lbl_welcome = Label(self.window, bg=BODY_BACK_COL, fg = FONT_COLOR_VAR, text="Hi there! Welcome to DBS’s chatbot assistant", font=FONT_FAMILY_BOLD, pady=10)
         lbl_welcome.place(relwidth=1)
@@ -42,13 +42,16 @@ class DBSResearchChatbotApp:
         lbl_footer.place(relwidth=1,rely=0.825)
 
         self.txt_entry = Entry(lbl_footer, bg=BODY_BACK_COL, fg=FONT_COLOR_VAR, font=FONT_FAMILY)
-        self.txt_entry.place(relwidth=0.72, relheight=0.05, rely=0.007, relx=0.010)
+        self.txt_entry.place(relwidth=0.62, relheight=0.05, rely=0.007, relx=0.010)
         self.txt_entry.focus()
         self.txt_entry.bind("<Return>",self._on_enter_pressed_event)
 
-        btn_send = Button(lbl_footer, text="Send", font=FONT_FAMILY_BOLD, width=20, bg=FOOTER_BACK_COLOR, 
+        btn_send = Button(lbl_footer, text="Send", font=FONT_FAMILY_BOLD, width=10, bg=FOOTER_BACK_COLOR, 
                              command=lambda:self._on_enter_pressed_event(None))
-        btn_send.place(relx=0.76, rely=0.007, relheight=0.05, relwidth=0.22)
+        btn_send.place(relx=0.63, rely=0.007, relheight=0.05, relwidth=0.16)
+
+        mic_button = Button(lbl_footer, text="Speak",width=10, bg=FOOTER_BACK_COLOR, font=FONT_FAMILY_BOLD)        
+        mic_button.place(relx=0.79, rely=0.007, relheight=0.05, relwidth=0.20)
 
     def _on_enter_pressed_event(self, event):
         msg = self.txt_entry.get()
@@ -72,6 +75,15 @@ class DBSResearchChatbotApp:
 
         self.txt_dbs_widget.see(END)
 
+def voice_input1():
+    print("Voice input function called")
+
+def voice_input():
+    query_listen = listen()
+    if query_listen:
+        entry.delete(0, self.END)
+        entry.insert(0, query)
+        ask_question()  # call your existing text-based ask
 #app execution code. 
 if __name__ == "__main__":
     app = DBSResearchChatbotApp()
