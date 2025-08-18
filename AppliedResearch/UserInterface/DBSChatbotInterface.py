@@ -1,4 +1,5 @@
 from tkinter import *
+from PredictResponse import provide_res_to_ui
 
 DBS_BOT_NAME = "DBS Research Chatbot"
 
@@ -63,8 +64,8 @@ class DBSResearchChatbotApp:
         self.txt_dbs_widget.insert(END,msg1)
         self.txt_dbs_widget.configure(state=DISABLED)
 
-        #msg2 = f"{DBS_BOT_NAME}:{provide_res_to_ui(msg)}\n\n"
-        msg2 = f"{DBS_BOT_NAME}\n"
+        msg2 = f"{DBS_BOT_NAME}:{provide_res_to_ui(msg)}\n\n"
+        #msg2 = f"{DBS_BOT_NAME}\n"
         self.txt_dbs_widget.configure(state=NORMAL)
         self.txt_dbs_widget.insert(END,msg2)
         self.txt_dbs_widget.configure(state=DISABLED)        
