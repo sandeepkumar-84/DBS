@@ -1,5 +1,6 @@
 from tkinter import *
 from PredictResponse import provide_res_to_ui
+from VoiceBasedLogic import listen
 
 DBS_BOT_NAME = "DBS Research Chatbot"
 
@@ -50,7 +51,8 @@ class DBSResearchChatbotApp:
                              command=lambda:self._on_enter_pressed_event(None))
         btn_send.place(relx=0.63, rely=0.007, relheight=0.05, relwidth=0.16)
 
-        mic_button = Button(lbl_footer, text="Speak",width=10, bg=FOOTER_BACK_COLOR, font=FONT_FAMILY_BOLD)        
+        mic_button = Button(lbl_footer, text="Speak",width=10, bg=FOOTER_BACK_COLOR, font=FONT_FAMILY_BOLD,
+                            command=self.voice_input)        
         mic_button.place(relx=0.79, rely=0.007, relheight=0.05, relwidth=0.20)
 
     def _on_enter_pressed_event(self, event):
@@ -75,15 +77,10 @@ class DBSResearchChatbotApp:
 
         self.txt_dbs_widget.see(END)
 
-def voice_input1():
-    print("Voice input function called")
-
-def voice_input():
-    query_listen = listen()
-    if query_listen:
-        entry.delete(0, self.END)
-        entry.insert(0, query)
-        ask_question()  # call your existing text-based ask
+    def voice_input(self):
+        query_listen = listen()
+        if query_listen:
+            self._insert_message_event(query_listen, "You")
 #app execution code. 
 if __name__ == "__main__":
     app = DBSResearchChatbotApp()
