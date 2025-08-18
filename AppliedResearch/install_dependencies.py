@@ -3,6 +3,7 @@ import sys
 
 packages = [
     "sentence-transformers",
+    "sentencepiece",
     "faiss-cpu",
     "transformers",
     "accelerate",
@@ -10,7 +11,10 @@ packages = [
     "nltk",
     "bert-score",
     "tf-keras",
-    "wordcloud"
+    "wordcloud",
+    "SpeechRecognition",
+    "pyttsx3",
+    "pyaudio"      
 ]
 
 for p in packages:
