@@ -490,19 +490,38 @@ Load the tes set from the file. file could be at local directory in case of pyth
 """
 
 file_path_test = r"/content/Research-Chatbot/Transformer_Test_DataSet.json"
+github_urls_test = "https://raw.githubusercontent.com/sandeepkumar-84/DBS/refs/heads/dbs_applied_research_project_v1/AppliedResearch/Working%20v1/Transformer%20Version/Transformer_Test_DataSet.json"
 
 test_set = []
+load_test_local = False
 
 def load_test_set(path):
     if not os.path.exists(path):
         raise FileNotFoundError(f"The file {path} does not exist.")
     with open(path, "r", encoding="utf-8") as f:
         data = json.load(f)
+        load_test_local = True
+        print(f"loaded test set from local file: {path}")
     return data
+
+def lod_test_set_from_github(path):
+    try:
+        response = requests.get(path)
+        if response.status_code == 200:
+            data = response.json()
+            return data
+        else:
+            raise Exception(f"failed to fetch data from {path}. Status code: {response.status_code}")
+    except Exception as e:
+        raise Exception(f"error loading test set from GitHub: {e}")
+
+
 
 if __name__ == "__main__":
     try:
-        test_set = load_test_set(file_path_test)
+        load_test_set(file_path_test)
+        if not load_test_local:
+          test_set = lod_test_set_from_github(github_urls_test)
         print("Test set loaded successfully.")
         for item in test_set:
             print(f"Query: {item.get('query', '')}")
@@ -510,8 +529,6 @@ if __name__ == "__main__":
             print("-" * 50)
     except Exception as e:
         print(f"Error: {e}")
-
-#test_set
 
 '''
 The function below evaluate the transformer model and contains all the different evaluation parameters required for the overall benchmarking
