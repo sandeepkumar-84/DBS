@@ -19,6 +19,8 @@ except LookupError:
     nltk.download('punkt')
     print("punkt has been downloaded........")
 
+from IntentCommonResponse import detect_intent_and_respond
+
 local_save_path = "/content/Saved_Model_Local"
 mode_to_run = 'local'
 repo_id = "sandeepkumar84/dbs-chatbot-transformer-hf-v3"
@@ -81,9 +83,13 @@ def generate_answer(query, context_passages):
 
 def provide_res_to_ui(text):
     query = text
-    load_model_and_index()
-    passages = retrieve_passages(query)
-    answer = generate_answer(query, passages)    
+    response, tag = detect_intent_and_respond(query)
+    if tag in ["greeting", "goodbye", "number", "location", "random", "swear", "salutaion", "task", "creator", "name"]:
+        return response
+    else:
+        load_model_and_index()
+        passages = retrieve_passages(query)
+        answer = generate_answer(query, passages)    
     return answer
 
 #print(chat_pre_response(chatbot_pre,"location"))
