@@ -14,7 +14,9 @@ packages = [
     "wordcloud",
     "SpeechRecognition",
     "pyttsx3",
-    "pyaudio"      
+    "pyaudio",
+    "requests",
+    "beautifulsoup4"    
 ]
 
 for p in packages:
